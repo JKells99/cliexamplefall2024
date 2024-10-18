@@ -33,32 +33,15 @@ public class RESTClient {
         return client;
     }
 
-    public String getResponseFromHTTPRequest() {
-        String responseBody = "";
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
-
-        try {
-            HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode()!=200) {
-                System.out.println("Status Code: " + response.statusCode());
-            }
-            responseBody = response.body();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+    private HttpResponse<String> httpSender(HttpRequest request) throws IOException, InterruptedException {
+        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode()==200) {
+            System.out.println("*****Response Body Print****");
+            System.out.println("***** " + response.body());
+        } else {
+            System.out.println("Error Status Code: " + response.statusCode());
         }
-        return responseBody;
-    }
-
-    public List<Author> getAllAuthors() {
-        List<Author> authors = new ArrayList<Author>();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
-        try {
-            HttpResponse<String> response = httpSender(request);
-            authors = buildAirportListFromResponse(response.body());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return authors;
+        return response;
     }
 
     public List<Author> buildAirportListFromResponse(String response) throws JsonProcessingException {
@@ -77,6 +60,18 @@ public class RESTClient {
         return books;
     }
 
+    public List<Author> getAllAuthors() {
+        List<Author> authors = new ArrayList<Author>();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(serverURL)).build();
+        try {
+            HttpResponse<String> response = httpSender(request);
+            authors = buildAirportListFromResponse(response.body());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return authors;
+    }
+
 
     public List<Book> getBooksForAuthor() {
         List<Book> books = new ArrayList<Book>();
@@ -91,14 +86,5 @@ public class RESTClient {
         return books;
     }
 
-    private HttpResponse<String> httpSender(HttpRequest request) throws IOException, InterruptedException {
-        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode()==200) {
-            System.out.println("*****Response Body Print****");
-            System.out.println("***** " + response.body());
-        } else {
-            System.out.println("Error Status Code: " + response.statusCode());
-        }
-        return response;
-    }
+
 }
