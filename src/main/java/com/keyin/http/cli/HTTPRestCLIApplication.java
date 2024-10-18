@@ -23,8 +23,9 @@ public class HTTPRestCLIApplication {
         this.restClient = restClient;
     }
 
-    public void generateAuthorReport() {
+    public String generateAuthorReport() {
         List<Author> authors = getRestClient().getAllAuthors();
+
         StringBuilder report = new StringBuilder();
 
         for (Author author : authors) {
@@ -39,12 +40,13 @@ public class HTTPRestCLIApplication {
 
         System.out.println(report.toString());
 
+        return report.toString();
     }
 
-    public void generateListOfBooksForSpecificAuthor() {
+    public String generateListOfBooksForSpecificAuthor() {
         List<Book> books = getRestClient().getBooksForAuthor();
 
-        StringBuilder report = new StringBuilder();
+        StringBuffer report = new StringBuffer();
 
         for (Book book : books) {
             report.append(book.getTitle());
@@ -58,6 +60,7 @@ public class HTTPRestCLIApplication {
 
         System.out.println(report.toString());
 
+        return report.toString();
     }
 
 
