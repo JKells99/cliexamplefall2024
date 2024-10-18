@@ -1,6 +1,8 @@
 package com.keyin.http.cli;
 
-import com.keyin.domain.Airport;
+
+import com.keyin.domian.Author;
+import com.keyin.domian.Book;
 import com.keyin.http.client.RESTClient;
 
 import java.util.List;
@@ -9,17 +11,17 @@ public class HTTPRestCLIApplication {
 
     private RESTClient restClient;
 
-    public String generateAirportReport() {
-        List<Airport> airports = getRestClient().getAllAirports();
+    public String generateAuthorReport() {
+        List<Author> authors = getRestClient().getAllAuthors();
 
         StringBuffer report = new StringBuffer();
 
-        for (Airport airport : airports) {
-            report.append(airport.getName());
+        for (Author author : authors) {
+            report.append(author.getAuthorName());
             report.append(" - ");
-            report.append(airport.getCode());
+            report.append(author.getAuthorId());
 
-            if (airports.indexOf(airport) != (airports.size() - 1)) {
+            if (authors.indexOf(author) != (authors.size() - 1)) {
                 report.append(",");
             }
         }
@@ -29,9 +31,27 @@ public class HTTPRestCLIApplication {
         return report.toString();
     }
 
-    private void listGreetings() {
-        System.out.println(getRestClient().getResponseFromHTTPRequest());
+    public String generateListOfBooksForSpecificAuthor() {
+        List<Book> books = getRestClient().getBooksForAuthor();
+
+        StringBuffer report = new StringBuffer();
+
+        for (Book book : books) {
+            report.append(book.getTitle());
+            report.append(" - ");
+            report.append(book.getPublisher());
+
+            if (books.indexOf(book) != (books.size() - 1)) {
+                report.append(",");
+            }
+        }
+
+        System.out.println(report.toString());
+
+        return report.toString();
     }
+
+
 
     public RESTClient getRestClient() {
         if (restClient == null) {
@@ -52,7 +72,9 @@ public class HTTPRestCLIApplication {
 
         HTTPRestCLIApplication cliApp = new HTTPRestCLIApplication();
 
-        String serverURL = "http://localhost:8080/whatever";
+        String serverURL = args[0];
+        //String serverURL = "http://localhost:8080/getBooksForAuthor?authorName=Jordan";
+
 
         if (serverURL != null && !serverURL.isEmpty()) {
 
@@ -62,9 +84,12 @@ public class HTTPRestCLIApplication {
             cliApp.setRestClient(restClient);
 
             if (serverURL.contains("greeting")) {
-                cliApp.listGreetings();
+
+            } else if (serverURL.contains("getBooksForAuthor")) {
+
+                cliApp.generateListOfBooksForSpecificAuthor();
             } else {
-                cliApp.generateAirportReport();
+                cliApp.generateAuthorReport();
             }
         }
 

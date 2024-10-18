@@ -1,16 +1,12 @@
-package com.keyin.author;
-
-import com.keyin.book.Book;
-import jakarta.persistence.*;
-
-import java.util.ArrayList;
+package com.keyin.domian;
 
 
-@Entity
+
+
+
 public class Author {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long authorId;
 
     private String authorName;

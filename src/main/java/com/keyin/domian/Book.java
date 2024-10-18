@@ -1,18 +1,16 @@
-package com.keyin.book;
+package com.keyin.domian;
 
-import com.keyin.author.Author;
-import jakarta.persistence.*;
 
-@Entity
+
+
 public class Book {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long bookId;
 
     private String title;
 
-    @ManyToOne
+
     private Author author;
 
     private String publisher;
